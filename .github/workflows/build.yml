@@ -8,7 +8,8 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    # تم تغيير البيئة إلى windows-2022 لضمان وجود أدوات بناء C++ المتوافقة مع node-gyp
+    runs-on: windows-2022 
 
     steps:
       - name: استنساخ المستودع
@@ -18,6 +19,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'npm'
+
+      - name: تهيئة أدوات بناء محرري لغة C++ وتحديث npm
+        run: |
+          npm config set msvs_version 2022
+          npm install -g npm@latest
+        shell: bash
 
       - name: تثبيت الاعتماديات
         run: |
